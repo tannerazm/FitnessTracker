@@ -125,6 +125,7 @@ describe("DB Routines", () => {
         name: faker.random.uuid(),
         goal: faker.random.uuid(),
       });
+      console.log(routine, 'AKDJFAKSDJFASDKF')
       expect(routine).toEqual(
         objectContaining({
           id: expect.any(Number),
