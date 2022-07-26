@@ -14,23 +14,69 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
   return routine;
 }
 
-async function getRoutineById(id) {}
+async function getRoutineById(id) {
+  const {
+    rows: [routine],
+  } = await client.query(
+    `
+SELECT *
+FROM routines
+WHERE id=$1;
+`,
+    [id]
+  );
+  return routine
+}
 
-async function getRoutinesWithoutActivities() {}
+async function getRoutinesWithoutActivities() {
 
-async function getAllRoutines() {}
+}
 
-async function getAllPublicRoutines() {}
+async function getAllRoutines() {
+  // await client.query(
+  //   `INSERT INTO routines("activityId")
+  //   VALUES ($1, $2, $3)
+  //   ON CONFLICT ("authorId") DO NOTHING
+  //   `);
 
-async function getAllRoutinesByUser({ username }) {}
+  //   const { rows } = await client.query(
+  //     `SELECT *
+  //     FROM routines;
+  //     `);
 
-async function getPublicRoutinesByUser({ username }) {}
+  const { rows } = await client.query(
+    `SELECT *
+      FROM routines;
+      `);
+  return rows;
+}
 
-async function getPublicRoutinesByActivity({ id }) {}
+async function getAllPublicRoutines() {
+  const { rows } = await client.query(
+    `SELECT *
+    FROM routines
+    WHERE "isPublic"=true;
+    `);
+  return rows;
+}
 
-async function updateRoutine({ id, ...fields }) {}
+async function getAllRoutinesByUser({ username }) { 
+  const { rows: [user] } = await client.query(
+    `SELECT *
+    FROM routines
+    WHERE name=$1;
+    `, [username]);
+  return user;
 
-async function destroyRoutine(id) {}
+}
+
+async function getPublicRoutinesByUser({ username }) { }
+
+async function getPublicRoutinesByActivity({ id }) { }
+
+async function updateRoutine({ id, ...fields }) { }
+
+async function destroyRoutine(id) { }
 
 module.exports = {
   getRoutineById,

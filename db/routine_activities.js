@@ -19,9 +19,27 @@ async function addActivityToRoutine({
   return routineActivity;
 }
 
-async function getRoutineActivityById(id) {}
+async function getRoutineActivityById(id) {
+  const { rows: [activity],  } = await client.query(
+    `
+    SELECT *
+    FROM routine_activities
+    WHERE id=$1;
+    `, [id]
+  );
+  return activity;
+}
 
-async function getRoutineActivitiesByRoutine({ id }) {}
+async function getRoutineActivitiesByRoutine({ id }) {
+  const { rows: [activity],  } = await client.query(
+    `
+    SELECT *
+    FROM routine_activities
+    WHERE "routineId"=$1;
+    `, [id]
+  );
+  return activity;
+}
 
 async function updateRoutineActivity({ id, ...fields }) {}
 
