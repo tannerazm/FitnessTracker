@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = process.env;
 
 // GET /api/health
-router.get('/health', async (req, res, next) => {
-    try {
-        console.log("All is well")
-        res.send("All is well")
-    } catch { console.error }
+router.get('/health', async (req, res) => {
+    res.send({message: 'You are healthy'});
 });
 
 // ROUTER: /api/users
@@ -26,14 +24,6 @@ router.use('/routines', routinesRouter);
 const routineActivitiesRouter = require('./routineActivities');
 const { route } = require('./users');
 router.use('/routine_activities', routineActivitiesRouter);
-
-// ROUTER: /api/unknown
-router.use((req, res) => {
-    // const response = await res.status(404).send("/api/unknown");
-    const response = res.send("/api/:unknown");
-    console.log(response.status, "response")
-    return response.status;
-  })
 
 
 module.exports = router;
