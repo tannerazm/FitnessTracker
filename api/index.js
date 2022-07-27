@@ -1,14 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
-const app = express();
-
-app.use(cors())
-
-app.get('/products/:id', function (req, res, next) {
-    res.json({ msg: 'This is CORS-enabled for all origins!' })
-})
-
 
 
 // GET /api/health
@@ -33,10 +24,16 @@ router.use('/routines', routinesRouter);
 
 // ROUTER: /api/routine_activities
 const routineActivitiesRouter = require('./routineActivities');
+const { route } = require('./users');
 router.use('/routine_activities', routineActivitiesRouter);
 
-app.listen(3000, function () {
-    console.log('CORS-enabled web server listening on port 3000')
-})
+// ROUTER: /api/unknown
+router.use((req, res) => {
+    // const response = await res.status(404).send("/api/unknown");
+    const response = res.send("/api/:unknown");
+    console.log(response.status, "response")
+    return response.status;
+  })
+
 
 module.exports = router;
