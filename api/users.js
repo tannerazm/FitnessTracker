@@ -3,38 +3,37 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
-const { createUser, getUserByUsername } = require("../db/users");
+const { createUser, getUserByUsername, getUser } = require("../db/users");
 
 // POST /api/users/register
 router.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
 
   try {
-    if(username) {
-        const _user = await getUserByUsername(username);
-  
-        if (_user) {
-          res.send({
-            error: 'USERNAME ALREADY EXISTS',
-            message: `User ${username} is already taken.`,
-            name: 'UserAlreadyExists'
-          });
-        }
+    if (username) {
+      const _user = await getUserByUsername(username);
+
+      if (_user) {
+        res.send({
+          error: "USERNAME ALREADY EXISTS",
+          message: `User ${username} is already taken.`,
+          name: "UserAlreadyExists",
+        });
+      }
     }
 
-    if(password.length < 8){
-        res.send({
-            error: 'PASSWORD TOO SHORT',
-            message: 'Password Too Short!',
-            name: 'PasswordIsTooShort'
-        })
+    if (password.length < 8) {
+      res.send({
+        error: "PASSWORD TOO SHORT",
+        message: "Password Too Short!",
+        name: "PasswordIsTooShort",
+      });
     }
 
     const user = await createUser({
       username,
       password,
     });
-
 
     const token = jwt.sign(
       {
@@ -48,17 +47,35 @@ router.post("/register", async (req, res, next) => {
     );
 
     res.send({ message: "Thank you for signing up", token: token, user: user });
-
-    } 
-    
-    catch ({ name, message }) {
-    next({ name, message })
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 // POST /api/users/login
-
+router.post("/login", async (req, res, next) => {
+  const { username } = req.body;
+  try {
+    const user = await getUserByUsername(username);
+    const token = jwt.sign(user, JWT_SECRET)
+    if(user) {
+      res.send({ token: token, message: "you're logged in!", user: user });
+  
+      return user;
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 // GET /api/users/me
-
+router.get("/me", async (req, res, next) => {
+  console.log(req.user, "<-- THIS IS REQ.USER")
+  try {
+    if (req.user) { await res.send(req.user) }
+    }
+  catch (error) {
+    next(error);
+  }
+});
 // GET /api/users/:username/routines
 
 module.exports = router;
