@@ -140,75 +140,75 @@ async function createInitialRoutines() {
   console.log("Finished creating routines.")
 }
 
-// async function createInitialRoutineActivities() {
-//   console.log("starting to create routine_activities...")
-//   const [bicepRoutine, chestRoutine, legRoutine, cardioRoutine] =
-//     await getRoutinesWithoutActivities()
-//   const [bicep1, bicep2, chest1, chest2, leg1, leg2, leg3] =
-//     await getAllActivities()
+async function createInitialRoutineActivities() {
+  console.log("starting to create routine_activities...")
+  const [bicepRoutine, chestRoutine, legRoutine, cardioRoutine] =
+    await getRoutinesWithoutActivities()
+  const [bicep1, bicep2, chest1, chest2, leg1, leg2, leg3] =
+    await getAllActivities()
 
-//   const routineActivitiesToCreate = [
-//     {
-//       routineId: bicepRoutine.id,
-//       activityId: bicep1.id,
-//       count: 10,
-//       duration: 5,
-//     },
-//     {
-//       routineId: bicepRoutine.id,
-//       activityId: bicep2.id,
-//       count: 10,
-//       duration: 8,
-//     },
-//     {
-//       routineId: chestRoutine.id,
-//       activityId: chest1.id,
-//       count: 10,
-//       duration: 8,
-//     },
-//     {
-//       routineId: chestRoutine.id,
-//       activityId: chest2.id,
-//       count: 10,
-//       duration: 7,
-//     },
-//     {
-//       routineId: legRoutine.id,
-//       activityId: leg1.id,
-//       count: 10,
-//       duration: 9,
-//     },
-//     {
-//       routineId: legRoutine.id,
-//       activityId: leg2.id,
-//       count: 10,
-//       duration: 10,
-//     },
-//     {
-//       routineId: legRoutine.id,
-//       activityId: leg3.id,
-//       count: 10,
-//       duration: 7,
-//     },
-//     {
-//       routineId: cardioRoutine.id,
-//       activityId: leg2.id,
-//       count: 10,
-//       duration: 10,
-//     },
-//     {
-//       routineId: cardioRoutine.id,
-//       activityId: leg3.id,
-//       count: 10,
-//       duration: 15,
-//     },
-//   ]
-//   const routineActivities = await Promise.all(
-//     routineActivitiesToCreate.map(addActivityToRoutine)
-//   )
-//   console.log("routine_activities created: ", routineActivities)
-//   console.log("Finished creating routine_activities!")
-// }
+  const routineActivitiesToCreate = [
+    {
+      routineId: bicepRoutine.id,
+      activityId: bicep1.id,
+      count: 10,
+      duration: 5,
+    },
+    {
+      routineId: bicepRoutine.id,
+      activityId: bicep2.id,
+      count: 10,
+      duration: 8,
+    },
+    {
+      routineId: chestRoutine.id,
+      activityId: chest1.id,
+      count: 10,
+      duration: 8,
+    },
+    {
+      routineId: chestRoutine.id,
+      activityId: chest2.id,
+      count: 10,
+      duration: 7,
+    },
+    {
+      routineId: legRoutine.id,
+      activityId: leg1.id,
+      count: 10,
+      duration: 9,
+    },
+    {
+      routineId: legRoutine.id,
+      activityId: leg2.id,
+      count: 10,
+      duration: 10,
+    },
+    {
+      routineId: legRoutine.id,
+      activityId: leg3.id,
+      count: 10,
+      duration: 7,
+    },
+    {
+      routineId: cardioRoutine.id,
+      activityId: leg2.id,
+      count: 10,
+      duration: 10,
+    },
+    {
+      routineId: cardioRoutine.id,
+      activityId: leg3.id,
+      count: 10,
+      duration: 15,
+    },
+  ]
+  const routineActivities = await Promise.all(
+    routineActivitiesToCreate.map(addActivityToRoutine)
+  )
+  console.log("routine_activities created: ", routineActivities)
+  console.log("Finished creating routine_activities!")
+}
 
 async function rebuildDB() {
   try {

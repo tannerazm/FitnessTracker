@@ -1,5 +1,6 @@
 const client = require("./client");
 const bcrypt = require('bcrypt');
+const { UserDoesNotExistError } = require("../errors");
 
 // database functions
 
@@ -43,6 +44,7 @@ async function getUser({ username, password }) {
   }
 
 async function getUserById(userId) {
+  try {
   const {
     rows: [user],
   } = await client.query(
@@ -57,6 +59,9 @@ async function getUserById(userId) {
     return null;
   }
   return user;
+} catch (error) {
+  throw error
+}
 }
 
 async function getUserByUsername(userName) {

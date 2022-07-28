@@ -41,8 +41,8 @@ const usersRouter = require('./users');
 router.use('/users', usersRouter);
 
 // ROUTER: /api/activities
-const activitiesRouter = require('./activities.js');
-router.use('/activities.js', activitiesRouter);
+const activitiesRouter = require('./activities');
+router.use('/activities', activitiesRouter);
 
 // ROUTER: /api/routines
 const routinesRouter = require('./routines');
@@ -50,7 +50,6 @@ router.use('/routines', routinesRouter);
 
 // ROUTER: /api/routine_activities
 const routineActivitiesRouter = require('./routineActivities');
-const { route } = require('./users');
 router.use('/routine_activities', routineActivitiesRouter);
 
 
