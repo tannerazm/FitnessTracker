@@ -41,8 +41,8 @@ const usersRouter = require('./users');
 router.use('/users', usersRouter);
 
 // ROUTER: /api/activities
-const activitiesRouter = require('./activities');
-router.use('/activities', activitiesRouter);
+const activitiesRouter = require('./activities.js');
+router.use('/activities.js', activitiesRouter);
 
 // ROUTER: /api/routines
 const routinesRouter = require('./routines');
