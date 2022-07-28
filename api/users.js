@@ -3,7 +3,8 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
-const { createUser, getUserByUsername, getUser } = require("../db/users");
+const { createUser, getUserByUsername } = require("../db/users");
+const { requireUser } = require('./utils');
 
 // POST /api/users/register
 router.post("/register", async (req, res, next) => {
@@ -14,6 +15,7 @@ router.post("/register", async (req, res, next) => {
       const _user = await getUserByUsername(username);
 
       if (_user) {
+        res.status(401)
         res.send({
           error: "USERNAME ALREADY EXISTS",
           message: `User ${username} is already taken.`,
@@ -23,6 +25,7 @@ router.post("/register", async (req, res, next) => {
     }
 
     if (password.length < 8) {
+      res.status(401)
       res.send({
         error: "PASSWORD TOO SHORT",
         message: "Password Too Short!",
@@ -67,10 +70,10 @@ router.post("/login", async (req, res, next) => {
   }
 });
 // GET /api/users/me
-router.get("/me", async (req, res, next) => {
-  console.log(req.user, "<-- THIS IS REQ.USER")
+router.get("/me", requireUser, async (req, res, next) => {
+  const { user } = req
   try {
-    if (req.user) { await res.send(req.user) }
+      res.send(user)
     }
   catch (error) {
     next(error);
