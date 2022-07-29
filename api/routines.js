@@ -37,41 +37,49 @@ router.post("/", requireUser, async (req, res, next) => {
   }
 });
 // PATCH /api/routines/:routineId
-router.patch("/:routineId", requireUser, async (req, res) => {
+router.patch("/:routineId", requireUser, async (req, res, next) => {
   const { isPublic, name, goal } = req.body;
   const { routineId } = req.params;
   const { id, username } = req.user;
   const routineToUpdate = await getRoutineById(routineId);
-  if (routineToUpdate.creatorId !== id) {
-    res.status(403).send({
-      error: "Error",
-      message: `User ${username} is not allowed to update ${routineToUpdate.name}`,
-      name: "User is not allowed to update this routine.",
-    });
-  } else {
-    const _updateRoutine = await updateRoutine({
-      id: id,
-      isPublic,
-      name,
-      goal,
-    });
-    res.send(_updateRoutine);
+  try {
+    if (routineToUpdate.creatorId !== id) {
+      res.status(403).send({
+        error: "Error",
+        message: `User ${username} is not allowed to update ${routineToUpdate.name}`,
+        name: "User is not allowed to update this routine.",
+      });
+    } else {
+      const _updateRoutine = await updateRoutine({
+        id: id,
+        isPublic,
+        name,
+        goal,
+      });
+      res.send(_updateRoutine);
+    }
+  } catch (error) {
+    next(error);
   }
 });
 // DELETE /api/routines/:routineId
-router.delete("/:routineId", requireUser, async (req, res) => {
+router.delete("/:routineId", requireUser, async (req, res, next) => {
   const { id, username } = req.user;
   const { routineId } = req.params;
   const routineToUpdate = await getRoutineById(routineId);
-  if (routineToUpdate.creatorId !== id) {
-    res.status(403).send({
-      error: "Error",
-      message: `User ${username} is not allowed to delete ${routineToUpdate.name}`,
-      name: "User is not allowed to delete this routine.",
-    });
-  } else {
-    await destroyRoutine(routineId);
-    res.send(routineToUpdate);
+  try {
+    if (routineToUpdate.creatorId !== id) {
+      res.status(403).send({
+        error: "Error",
+        message: `User ${username} is not allowed to delete ${routineToUpdate.name}`,
+        name: "User is not allowed to delete this routine.",
+      });
+    } else {
+      await destroyRoutine(routineId);
+      res.send(routineToUpdate);
+    }
+  } catch (error) {
+    next(error);
   }
 });
 // POST /api/routines/:routineId/activities
@@ -83,30 +91,33 @@ router.post("/:routineId/activities", async (req, res, next) => {
   const filteredRoutineArray = bob.filter(
     (element) => activityId === element.activityId
   );
-
-  if (filteredRoutineArray && filteredRoutineArray.length) {
-    next({
-      error: "Error",
-      message: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
-      name: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
-    });
-  } else {
-    const routineWithActivity = await addActivityToRoutine({
-      routineId,
-      activityId,
-      count,
-      duration,
-    });
-
-    if (routineWithActivity) {
-      res.send(routineWithActivity);
-    } else {
+  try {
+    if (filteredRoutineArray && filteredRoutineArray.length) {
       next({
         error: "Error",
         message: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
         name: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
       });
+    } else {
+      const routineWithActivity = await addActivityToRoutine({
+        routineId,
+        activityId,
+        count,
+        duration,
+      });
+
+      if (routineWithActivity) {
+        res.send(routineWithActivity);
+      } else {
+        next({
+          error: "Error",
+          message: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
+          name: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
+        });
+      }
     }
+  } catch (error) {
+    next(error);
   }
 });
 

@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const { getPublicRoutinesByUser, getAllRoutinesByUser } = require("../db");
 const { JWT_SECRET } = process.env;
 const { createUser, getUserByUsername } = require("../db/users");
-const { requireUser } = require('./utils');
+const { requireUser } = require("./utils");
 
 // POST /api/users/register
 router.post("/register", async (req, res, next) => {
@@ -16,7 +16,7 @@ router.post("/register", async (req, res, next) => {
       const _user = await getUserByUsername(username);
 
       if (_user) {
-        res.status(401)
+        res.status(401);
         next({
           error: "USERNAME ALREADY EXISTS",
           message: `User ${username} is already taken.`,
@@ -26,7 +26,7 @@ router.post("/register", async (req, res, next) => {
     }
 
     if (password.length < 8) {
-      res.status(401)
+      res.status(401);
       next({
         error: "PASSWORD TOO SHORT",
         message: "Password Too Short!",
@@ -60,7 +60,7 @@ router.post("/login", async (req, res, next) => {
   const { username } = req.body;
   try {
     const user = await getUserByUsername(username);
-    const token = jwt.sign(user, JWT_SECRET)
+    const token = jwt.sign(user, JWT_SECRET);
     if (user) {
       res.send({ token: token, message: "you're logged in!", user: user });
 
@@ -72,23 +72,19 @@ router.post("/login", async (req, res, next) => {
 });
 // GET /api/users/me
 router.get("/me", requireUser, async (req, res, next) => {
-  const { user } = req
+  const { user } = req;
   try {
-    res.send(user)
-  }
-  catch (error) {
+    res.send(user);
+  } catch (error) {
     next(error);
   }
 });
 // GET /api/users/:username/routines
-router.get('/:username/routines', requireUser, async (req, res, next) => {
-  
-  const { username } = req.params
-  const user = await getUserByUsername(username)
-  const joe = await getPublicRoutinesByUser({username: username}
-    ) //any user
-  const bob = await getAllRoutinesByUser({username: username}
-    ) //specific user logged in
+router.get("/:username/routines", requireUser, async (req, res, next) => {
+  const { username } = req.params;
+  const user = await getUserByUsername(username);
+  const joe = await getPublicRoutinesByUser({ username: username }); //any user
+  const bob = await getAllRoutinesByUser({ username: username }); //specific user logged in
   try {
     if (!username) {
       next({
@@ -96,17 +92,14 @@ router.get('/:username/routines', requireUser, async (req, res, next) => {
         message: "Password Too Short!",
         name: "PasswordIsTooShort",
       });
+    } else if (req.user && user.id === req.user.id) {
+      res.send(bob);
+    } else {
+      res.send(joe);
     }
-    else if (req.user && user.id === req.user.id) {
-      res.send(bob)
-    }
-    else {
-      res.send(joe)
-    }
-  }
-  catch (error) {
+  } catch (error) {
     next(error);
   }
-})
+});
 
 module.exports = router;
