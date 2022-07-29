@@ -26,7 +26,6 @@ WHERE id=$1;
 `,
     [id]
   );
-  console.log(routine, "gotten routine")
   return routine
 }
 
