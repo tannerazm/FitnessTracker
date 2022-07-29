@@ -66,7 +66,6 @@ router.patch('/:activityId', requireUser, async (req, res, next) => {
             res.status(401)
             next({name: "Hey", message: `Activity ${req.params.activityId} not found`})
         } else if (_name) {
-            console.log(_name, "THIS IS _NAME")
             res.status(401)
             next({name: "BLAH", message: `An activity with name ${name} already exists`})
         } else {

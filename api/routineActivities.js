@@ -19,7 +19,6 @@ router.patch("/:routineActivityId", requireUser, async (req, res, next) => {
     }
     else {
         const updatedRoutineActivity = await updateRoutineActivity({ id: id, count, duration})
-        console.log(updatedRoutineActivity, "updated routine activity")
         res.send(updatedRoutineActivity)
         }
 
