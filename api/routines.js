@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireUser } = require('./utils')
-const { getUserById, getAllRoutines, getAllPublicRoutines, createRoutine, updateRoutine, getRoutineById } = require('../db');
+const { getUserById, getAllRoutines, getAllPublicRoutines, createRoutine, updateRoutine, destroyRoutine, getRoutineById } = require('../db');
 const router = express.Router();
 
 // GET /api/routines
@@ -29,20 +29,21 @@ router.post('/', requireUser, async (req, res, next) => {
 // PATCH /api/routines/:routineId
 router.patch('/:routineId', requireUser, async (req, res) => {
   const { isPublic, name, goal } = req.body;
-  const { id, username} = req.user;
-  const _id = await getRoutineById(id)
-  if (_id) {
-    const _updateRoutine = await updateRoutine({id: id, isPublic, name, goal})
+  const { routineId } = req.params
+  const { username } = req.user
+  const routineToUpdate = await getRoutineById(routineId)
+  if (routineToUpdate) {
+    const _updateRoutine = await updateRoutine({id: routineId, isPublic, name, goal})
     res.send(_updateRoutine)
   }
   else {
     res.status(403)
-    res.send({message: `User ${username} is not allowed to update ${name}`, name: "please work im begging"})
+    res.send({error: "ERROR", message: `User ${username} is not allowed to update ${routineToUpdate.name}`, name: "cannot "})
   }
 }
 )
 // DELETE /api/routines/:routineId
-
+// router.delete('/:routineId',  )
 // POST /api/routines/:routineId/activities
 
 module.exports = router;
