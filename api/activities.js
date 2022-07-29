@@ -52,7 +52,7 @@ router.post("/", async (req, res, next) => {
     if (_name) {
       res.status(401);
       next({
-        error: "Error",
+        error: "An activity with this name already exists.",
         name: "An activity with this name already exists.",
         message: `An activity with name ${name} already exists`,
       });

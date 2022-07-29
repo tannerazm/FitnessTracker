@@ -18,7 +18,7 @@ router.patch("/:routineActivityId", requireUser, async (req, res, next) => {
   try {
     if (routineToUpdate.id !== id) {
       res.status(403).send({
-        error: "Error",
+        error: "User is not allowed to update this routine.",
         message: `User ${username} is not allowed to update ${_getRoutineById.name}`,
         name: "User is not allowed to update this routine.",
       });
@@ -47,7 +47,7 @@ router.delete("/:routineActivityId", requireUser, async (req, res, next) => {
   try {
     if (_getRoutineById.creatorId !== id) {
       res.status(403).send({
-        error: "Error",
+        error: "User is not allowed to delete this routine.",
         message: `User ${username} is not allowed to delete ${_getRoutineById.name}`,
         name: "User is not allowed to delete this routine.",
       });

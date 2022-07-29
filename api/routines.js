@@ -45,7 +45,7 @@ router.patch("/:routineId", requireUser, async (req, res, next) => {
   try {
     if (routineToUpdate.creatorId !== id) {
       res.status(403).send({
-        error: "Error",
+        error: "User is not allowed to update this routine.",
         message: `User ${username} is not allowed to update ${routineToUpdate.name}`,
         name: "User is not allowed to update this routine.",
       });
@@ -70,7 +70,7 @@ router.delete("/:routineId", requireUser, async (req, res, next) => {
   try {
     if (routineToUpdate.creatorId !== id) {
       res.status(403).send({
-        error: "Error",
+        error: "User is not allowed to delete this routine.",
         message: `User ${username} is not allowed to delete ${routineToUpdate.name}`,
         name: "User is not allowed to delete this routine.",
       });
@@ -94,9 +94,9 @@ router.post("/:routineId/activities", async (req, res, next) => {
   try {
     if (filteredRoutineArray && filteredRoutineArray.length) {
       next({
-        error: "Error",
+        error: "Activity ID already exists in Routine ID",
         message: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
-        name: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
+        name: `Activity ID already exists in Routine ID.`,
       });
     } else {
       const routineWithActivity = await addActivityToRoutine({
@@ -110,9 +110,9 @@ router.post("/:routineId/activities", async (req, res, next) => {
         res.send(routineWithActivity);
       } else {
         next({
-          error: "Error",
+          error: "Activity ID already exists in Routine ID.",
           message: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
-          name: `Activity ID ${activityId} already exists in Routine ID ${routineId}`,
+          name: `Activity ID already exists in Routine ID.`,
         });
       }
     }
