@@ -44,7 +44,7 @@ describe("DB Routine Activities", () => {
     };
   });
 
-  describe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
+  xdescribe("addActivityToRoutine({ routineId, activityId, count, duration })", () => {
     it("creates a new routine_activity, and return it", async () => {
       const routineActivity = await addActivityToRoutine(routineActivityData);
 
@@ -55,7 +55,7 @@ describe("DB Routine Activities", () => {
     });
   });
 
-  describe("getRoutineActivityById", () => {
+  xdescribe("getRoutineActivityById", () => {
     it("should return the routine activity by id", async () => {
       const fakeRoutineActivity = await createFakeRoutineActivity();
       const routineActivity = await getRoutineActivityById(

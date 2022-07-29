@@ -1,5 +1,6 @@
 const client = require("./client");
 const { attachActivitiesToRoutines } = require("./activities");
+const { UserDoesNotExistError } = require("../errors");
 
 async function createRoutine({ creatorId, isPublic, name, goal }) {
   const {
@@ -16,6 +17,7 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
 }
 
 async function getRoutineById(id) {
+  try {
   const {
     rows: [routine],
   } = await client.query(
@@ -27,6 +29,9 @@ WHERE id=$1;
     [id]
   );
   return routine
+  } catch (error) {
+    return error
+  }
 }
 
 async function getRoutinesWithoutActivities() {

@@ -30,17 +30,17 @@ router.delete("/:routineActivityId", requireUser, async (req, res) => {
     const { id, username } = req.user;
     const { routineActivityId } = req.params;
     const routineActivtyToUpdate = await getRoutineActivityById(routineActivityId);
-    const _getRoutineById = await getRoutineById(routineActivityId)
+    const _getRoutineById = await getRoutineById(routineActivtyToUpdate.routineId)
     console.log(_getRoutineById, "get routine by id")
-    if (routineActivtyToUpdate.id !== id) {
+    if (_getRoutineById.creatorId !== id) {
       res.status(403).send({
         error: "ERROR",
         message: `User ${username} is not allowed to delete ${_getRoutineById.name}`,
         name: "cannot ",
       });
     } else {
-      await destroyRoutineActivity(routineActivityId);
-      res.send(routineActivtyToUpdate);
+      const destroyedActivity = await destroyRoutineActivity(routineActivityId);
+      res.send(destroyedActivity);
     }
   });
 module.exports = router;
