@@ -14,6 +14,13 @@ function requireUser(req, res, next) {
     }
   }
 
+  //function getUser() {
+    
+  //return {id, name,}
+  //}
+
   module.exports = {
     requireUser
   }
+
+  
