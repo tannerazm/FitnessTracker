@@ -2,8 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { getPublicRoutinesByUser, getAllRoutines, getAllRoutinesByUser } = require("../db");
-const client = require("../db/client");
+const { getPublicRoutinesByUser, getAllRoutinesByUser } = require("../db");
 const { JWT_SECRET } = process.env;
 const { createUser, getUserByUsername } = require("../db/users");
 const { requireUser } = require('./utils');

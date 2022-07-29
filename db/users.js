@@ -60,7 +60,7 @@ async function getUserById(userId) {
   }
   return user;
 } catch (error) {
-  throw error
+  return error
 }
 }
 

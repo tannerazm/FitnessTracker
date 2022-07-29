@@ -4,7 +4,7 @@ const { requireUser } = require('./utils');
 const router = express.Router();
 
 // PATCH /api/routine_activities/:routineActivityId
-router.patch("/:routineActivityId", requireUser, async (req, res, next) => {
+router.patch("/:routineActivityId", requireUser, async (req, res) => {
     const { count, duration } = req.body;
     const { routineActivityId } = req.params;
     const { id, username } = req.user;
@@ -12,9 +12,9 @@ router.patch("/:routineActivityId", requireUser, async (req, res, next) => {
     const _getRoutineById = await getRoutineById(routineActivityId)
     if (routineToUpdate.id !== id){
         res.status(403).send({
-            error: "ERROR",
+            error: "Error",
             message: `User ${username} is not allowed to update ${_getRoutineById.name}`,
-            name: "cannot ",
+            name: "User is not allowed to update this routine.",
         });
     }
     else {
@@ -33,9 +33,9 @@ router.delete("/:routineActivityId", requireUser, async (req, res) => {
     console.log(_getRoutineById, "get routine by id")
     if (_getRoutineById.creatorId !== id) {
       res.status(403).send({
-        error: "ERROR",
+        error: "Error",
         message: `User ${username} is not allowed to delete ${_getRoutineById.name}`,
-        name: "cannot ",
+        name: "User is not allowed to delete this routine.",
       });
     } else {
       const destroyedActivity = await destroyRoutineActivity(routineActivityId);

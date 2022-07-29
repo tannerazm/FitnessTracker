@@ -13,12 +13,7 @@ function requireUser(req, res, next) {
       console.error(error)
     }
   }
-
-  //function getUser() {
-    
-  //return {id, name,}
-  //}
-
+  
   module.exports = {
     requireUser
   }

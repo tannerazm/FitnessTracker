@@ -12,7 +12,7 @@ router.get('/:activityId/routines', async (req, res, next) => {
         
         if (!_publicActivity || !_allActivities) {
             res.status(401)
-            next({name: "BLAH", message: `Activity ${req.params.activityId} not found`})
+            next({name: "Activity not found.", message: `Activity ${req.params.activityId} not found`})
         } else {
             const publicRoutines = await getAllPublicRoutines()
             res.send(publicRoutines)
@@ -41,7 +41,7 @@ router.post('/', async (req, res, next) => {
 
         if(_name) {
             res.status(401)
-            next({error: "BLAH", name: "BLAH", message: `An activity with name ${name} already exists`})
+            next({error: "Error", name: "An activity with this name already exists.", message: `An activity with name ${name} already exists`})
         }
 
         const activity = await createActivity({
@@ -64,10 +64,10 @@ router.patch('/:activityId', requireUser, async (req, res, next) => {
         
         if (!_id) {
             res.status(401)
-            next({name: "Hey", message: `Activity ${req.params.activityId} not found`})
+            next({name: "Activity id not found.", message: `Activity ${req.params.activityId} not found`})
         } else if (_name) {
             res.status(401)
-            next({name: "BLAH", message: `An activity with name ${name} already exists`})
+            next({name: "An activity with that name already exists.", message: `An activity with name ${name} already exists`})
         } else {
             const _activity = await updateActivity({id: req.params.activityId, name, description})
             res.send(_activity)

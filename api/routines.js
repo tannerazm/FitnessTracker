@@ -1,8 +1,6 @@
 const express = require("express");
 const { requireUser } = require("./utils");
 const {
-  getUserById,
-  getAllRoutines,
   getAllPublicRoutines,
   createRoutine,
   updateRoutine,
@@ -46,9 +44,9 @@ router.patch("/:routineId", requireUser, async (req, res) => {
   const routineToUpdate = await getRoutineById(routineId);
   if (routineToUpdate.creatorId !== id) {
     res.status(403).send({
-      error: "ERROR",
+      error: "Error",
       message: `User ${username} is not allowed to update ${routineToUpdate.name}`,
-      name: "cannot ",
+      name: "User is not allowed to update this routine.",
     });
   } else {
     const _updateRoutine = await updateRoutine({
@@ -67,9 +65,9 @@ router.delete("/:routineId", requireUser, async (req, res) => {
   const routineToUpdate = await getRoutineById(routineId);
   if (routineToUpdate.creatorId !== id) {
     res.status(403).send({
-      error: "ERROR",
+      error: "Error",
       message: `User ${username} is not allowed to delete ${routineToUpdate.name}`,
-      name: "cannot ",
+      name: "User is not allowed to delete this routine.",
     });
   } else {
     await destroyRoutine(routineId);
